@@ -6,5 +6,4 @@ RUN go install app
 
 FROM debian:jessie-slim
 COPY --from=builder /go/bin/app /bin/app
-COPY --from=builder /go/src/app/*.pem /
 ENTRYPOINT ["/bin/app"]
