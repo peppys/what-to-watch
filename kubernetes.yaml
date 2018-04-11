@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: personal-site-deployment
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: personal-site-api
+    spec:
+      containers:
+      - name: personal-site-api
+        image: gcr.io/personal-200804/site-api:v0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+            limits:
+              cpu: 1
+            requests:
+              cpu: 10m
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: personal-site-api-service
+spec:
+  selector:
+    app: personal-site-api
+  ports:
+    - protocol: TCP
+      port: 8080
+  type: LoadBalancer
