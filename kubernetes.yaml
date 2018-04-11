@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: personal-site-api
-        image: gcr.io/personal-200804/site-api:v0.0.1
+        image: gcr.io/personal-200804/site-api:v0.0.4
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

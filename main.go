@@ -7,7 +7,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte("Hello World! v5\n"))
+		w.Write([]byte("Hello World! v6\n"))
 	})
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
