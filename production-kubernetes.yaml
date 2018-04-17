@@ -11,8 +11,7 @@ spec:
     spec:
       containers:
       - name: personal-site-api
-        image: gcr.io/personal-200804/site-api:v0.0.4
-        imagePullPolicy: Always
+        image: gcr.io/personal-200804/site-api-prod:v0.0.5
         ports:
         - containerPort: 8080
         resources:
@@ -30,5 +29,7 @@ spec:
     app: personal-site-api
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
+      targetPort: 8080
   type: LoadBalancer
+  loadBalancerIP: "35.197.77.136"
