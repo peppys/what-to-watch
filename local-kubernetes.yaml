@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: personal-site-deployment
 spec:
-  replicas: 5
+  replicas: 1
   template:
     metadata:
       labels:
@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: personal-site
-        image: gcr.io/personal-200804/site-dev:v0.0.5
+        image: gcr.io/personal-200804/site-dev:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -20,11 +20,16 @@ spec:
               cpu: 1
             requests:
               cpu: 10m
+        env:
+        - name: API_URL
+          value: "http://localhost:8001/api/v1/namespaces/default/services/personal-api-service/proxy/"
+      imagePullSecrets:
+      - name: gcr
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: personal-site-api-service
+  name: personal-site-service
 spec:
   selector:
     app: personal-site-api
@@ -39,7 +44,7 @@ kind: Deployment
 metadata:
   name: personal-api-deployment
 spec:
-  replicas: 5
+  replicas: 1
   template:
     metadata:
       labels:
@@ -47,7 +52,7 @@ spec:
     spec:
       containers:
       - name: personal-api
-        image: gcr.io/personal-200804/api-dev:v0.0.5
+        image: gcr.io/personal-200804/api-dev:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
@@ -56,6 +61,8 @@ spec:
               cpu: 1
             requests:
               cpu: 10m
+      imagePullSecrets:
+        - name: gcr
 ---
 kind: Service
 apiVersion: v1

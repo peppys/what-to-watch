@@ -8,13 +8,12 @@ dev:
 	make build v=$(v) env=dev
 	make push v=$(v) env=dev
 	kubectl config set current-context minikube
-	# kubectl create secret docker-registry gcr \
-    #     --docker-server=https://gcr.io \
-    #     --docker-username=oauth2accesstoken \
-    #     --docker-password=$(gcloud auth print-access-token) \
-    #     --docker-email=peppysisay@gmail.com
-	# kubectl patch serviceaccount default \
-    #     -p '{"imagePullSecrets": [{"name": "gcr"}]}'
+	kubectl delete secret gcr
+	kubectl create secret docker-registry gcr \
+        --docker-server=https://gcr.io \
+        --docker-username=oauth2accesstoken \
+        --docker-password=$(shell gcloud auth print-access-token) \
+        --docker-email=peppysisay@gmail.com
 	kubectl apply -f local-kubernetes.yaml
 push:
 	gcloud docker -- push gcr.io/personal-200804/site-$(env):v$(v)
