@@ -22,7 +22,7 @@ spec:
               cpu: 10m
         env:
         - name: API_URL
-          value: "http://localhost:8001/api/v1/namespaces/default/services/personal-api-service/proxy/"
+          value: http://192.168.99.100:30101
       imagePullSecrets:
       - name: gcr
 ---
@@ -36,6 +36,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
+      nodePort: 30100
       targetPort: 8080
   type: LoadBalancer
 ---
@@ -74,5 +75,6 @@ spec:
   ports:
     - protocol: TCP
       port: 80
+      nodePort: 30101
       targetPort: 8081
   type: LoadBalancer
