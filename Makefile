@@ -1,10 +1,11 @@
 build:
-	docker build -t gcr.io/personal-200804/site-$(env):v$(v) web
-	docker build -t gcr.io/personal-200804/api-$(env):v$(v) api
+	docker build -t gcr.io/personal-200804/$(app)-$(env):v$(v) $(app)
 run:
-	make build v=$(v) env=dev
-	docker run -t -i --rm -p 8080:8080 -e VERSION=$(v) -e APP_ENV=dev gcr.io/personal-200804/site-api-dev:v$(v)
-dev:
+	docker run -t -i --rm -p :$(port):$(port) -e VERSION=$(v) -e APP_ENV=dev gcr.io/personal-200804/$(app)-$(env):v$(v) --port=$(port)
+start:
+	make build app=$(app) v=1 env=dev
+	make run app=$(app) v=1 env=dev port=$(port)
+minikube:
 	make build v=$(v) env=dev
 	make push v=$(v) env=dev
 	kubectl config set current-context minikube
@@ -16,7 +17,7 @@ dev:
         --docker-email=peppysisay@gmail.com
 	kubectl apply -f local-kubernetes.yaml
 push:
-	gcloud docker -- push gcr.io/personal-200804/site-$(env):v$(v)
+	gcloud docker -- push gcr.io/personal-200804/web-$(env):v$(v)
 	gcloud docker -- push gcr.io/personal-200804/api-$(env):v$(v)
 deploy:
 	make build v=$(v) env=prod
