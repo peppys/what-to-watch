@@ -4,7 +4,7 @@ run:
 	docker run -t -i --rm -p :$(port):$(port) -e VERSION=$(v) -e APP_ENV=dev gcr.io/personal-200804/$(app)-$(env):v$(v) --port=$(port)
 start:
 	make build app=$(app) v=1 env=dev
-	make run app=$(app) v=1 env=dev port=$(port)
+	make run app=$(app) v=1 env=dev port=$(or $(port), 8081)
 minikube:
 	make build v=$(v) env=dev
 	make push v=$(v) env=dev
