@@ -1,0 +1,45 @@
+syntax = "proto3";
+package proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message ResumeResponse {
+    message DateRange {
+        google.protobuf.Timestamp start = 1;
+        google.protobuf.Timestamp end = 2;
+        string display = 3;
+    }
+
+    string first_name = 1;
+    string last_name = 2;
+    string headline = 3;
+    string summary = 4;
+
+    message Experience {
+        string title = 1;
+        string company = 2;
+        string location = 3;
+        string description = 4;
+        DateRange date_range = 5;
+    }
+
+    repeated Experience experience = 5;
+
+    message Education {
+        string degree = 1;
+        string major = 2;
+        string school = 3;
+        string location = 4;
+        DateRange date_range = 5;
+    }
+}
+
+service ResumeService {
+    rpc Get(google.protobuf.Empty) returns (ResumeResponse) {
+        option (google.api.http) = {
+            get: "/v1/resume"
+        };
+    }
+}
