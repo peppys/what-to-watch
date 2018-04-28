@@ -22,5 +22,10 @@ func ListenAndServeHTTPGateway(grpcAddress, httpAddress string) error {
 		return err
 	}
 
+	err = pb.RegisterHealthServiceHandlerFromEndpoint(ctx, mux, grpcAddress, dialOpts)
+	if err != nil {
+		return err
+	}
+
 	return http.ListenAndServe(httpAddress, mux)
 }

@@ -19,13 +19,14 @@ func main() {
 
 	httpAddress := fmt.Sprintf("%s:%s", *ip, *port)
 
+	healthAPI := controller.NewHealth()
 	resumeAPI := controller.NewResume(
 		service.NewResume(
 			repository.NewResume(),
 		),
 	)
 
-	go server.ListenAndServe(":50051", resumeAPI)
+	go server.ListenAndServe(":50051", resumeAPI, healthAPI)
 
 	log.Fatal(server.ListenAndServeHTTPGateway(":50051", httpAddress))
 }

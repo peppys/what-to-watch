@@ -8,13 +8,14 @@ import (
 )
 
 // ListenAndServe - TODO
-func ListenAndServe(address string, resumeAPI pb.ResumeServiceServer) error {
-	listen, err := net.Listen("tcp", ":50051")
+func ListenAndServe(address string, resumeAPI pb.ResumeServiceServer, healthAPI pb.HealthServiceServer) error {
+	listen, err := net.Listen("tcp", address)
 	if err != nil {
 		return err
 	}
 
 	server := grpc.NewServer()
+	pb.RegisterHealthServiceServer(server, healthAPI)
 	pb.RegisterResumeServiceServer(server, resumeAPI)
 	
 	return server.Serve(listen)
