@@ -1,14 +1,19 @@
 package middleware
 
 import (
+	"context"
 	"log"
-	"net/http"
+	"time"
+
+	"google.golang.org/grpc"
 )
 
 // Logging middleware logs requests
-func Logging(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.RequestURI)
-		next.ServeHTTP(w, r)
-	})
+func Logging(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	start := time.Now()
+	h, err := handler(ctx, req)
+
+	log.Printf("Request - Method:%s\tDuration:%s\tError:%v", info.FullMethod, time.Since(start), err)
+
+	return h, err
 }
