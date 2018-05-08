@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/PeppyS/personal-site-api/controller"
-	"github.com/PeppyS/personal-site-api/repository"
-	"github.com/PeppyS/personal-site-api/server"
-	"github.com/PeppyS/personal-site-api/service"
+	"github.com/PeppyS/what-to-watch/api/controller"
+	"github.com/PeppyS/what-to-watch/api/repository"
+	"github.com/PeppyS/what-to-watch/api/server"
+	"github.com/PeppyS/what-to-watch/api/service"
 )
 
 func main() {

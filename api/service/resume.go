@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/PeppyS/personal-site-api/model"
+	"github.com/PeppyS/what-to-watch/api/model"
 )
 
 type resumeRepository interface {

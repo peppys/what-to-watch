@@ -3,8 +3,8 @@ package server
 import (
 	"net"
 
-	"github.com/PeppyS/personal-site-api/middleware"
-	pb "github.com/PeppyS/personal-site-api/proto"
+	"github.com/PeppyS/what-to-watch/api/middleware"
+	pb "github.com/PeppyS/what-to-watch/api/proto"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 )

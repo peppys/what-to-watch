@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	pb "github.com/PeppyS/personal-site-api/proto"
+	pb "github.com/PeppyS/what-to-watch/api/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 )

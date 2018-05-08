@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/PeppyS/personal-site-api/model"
+	"github.com/PeppyS/what-to-watch/api/model"
 )
 
 // ResumePostgresRepository defines repo structure that interacts with postgres database
