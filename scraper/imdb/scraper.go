@@ -1,19 +1,11 @@
 package imdb
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/gocolly/colly"
 )
-
-type Movie struct {
-	Title       string
-	Rating      string
-	MovieRating float64
-	Genre       string
-}
 
 const (
 	moviesInTheatersPage = "https://www.imdb.com/showtimes/location"
@@ -27,38 +19,47 @@ const (
 	genreSelector       = "div.title_wrapper a span"
 )
 
-func Scrape() []Movie {
+type Movie struct {
+	Title       string
+	Rating      string
+	MovieRating float64
+	Genre       string
+}
+
+type Scraper struct {
+	*colly.Collector
+}
+
+func NewScraper(c *colly.Collector) *Scraper {
+	return &Scraper{c}
+}
+
+func (s *Scraper) Scrape() []Movie {
 	var movies []Movie
 
-	c := colly.NewCollector()
-
 	// Crawl all movies in theaters
-	c.OnHTML(linkSelector, func(e *colly.HTMLElement) {
-		e.Request.Visit(strings.Replace(e.Attr("href"), "/showtimes", "", 1))
+	s.OnHTML(linkSelector, func(e *colly.HTMLElement) {
+		go e.Request.Visit(strings.Replace(e.Attr("href"), "/showtimes", "", 1))
 	})
 
 	// Scrape movie info
-	c.OnHTML(moviePageSelector, func(e *colly.HTMLElement) {
+	s.OnHTML(moviePageSelector, func(e *colly.HTMLElement) {
 		title := strings.TrimSpace(e.ChildText(titleSelector))
 		rating := strings.TrimSpace(e.ChildAttr(ratingSelector, "content"))
 		movieRating, _ := strconv.ParseFloat(strings.TrimSpace(e.ChildText(movieRatingSelector)), 64)
 		genre := strings.TrimSpace(e.ChildText(genreSelector))
 
-		movie := Movie{
+		movies = append(movies, Movie{
 			title,
 			rating,
 			movieRating,
 			genre,
-		}
-
-		fmt.Println(movie)
-
-		movies = append(movies, movie)
+		})
 	})
 
-	c.Visit(moviesInTheatersPage)
+	s.Visit(moviesInTheatersPage)
 
-	c.Wait()
+	s.Wait()
 
 	return movies
 }
