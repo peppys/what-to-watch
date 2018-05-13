@@ -14,6 +14,7 @@ const (
 
 	moviePageSelector   = "div.title-overview"
 	titleSelector       = "div.title_wrapper h1"
+	yearSelector        = "span#titleYear"
 	ratingSelector      = "div.title_wrapper div meta[itemprop=contentRating]"
 	movieRatingSelector = "div.imdbRating span[itemprop=ratingValue]"
 	genreSelector       = "div.title_wrapper a span"
@@ -44,7 +45,10 @@ func (s *Scraper) Scrape() []Movie {
 
 	// Scrape movie info
 	s.OnHTML(moviePageSelector, func(e *colly.HTMLElement) {
-		title := strings.TrimSpace(e.ChildText(titleSelector))
+		title := strings.TrimSpace(
+			// Remove year from title
+			strings.Replace(e.ChildText(titleSelector), e.ChildText(yearSelector), "", 1),
+		)
 		rating := strings.TrimSpace(e.ChildAttr(ratingSelector, "content"))
 		movieRating, _ := strconv.ParseFloat(strings.TrimSpace(e.ChildText(movieRatingSelector)), 64)
 		genre := strings.TrimSpace(e.ChildText(genreSelector))

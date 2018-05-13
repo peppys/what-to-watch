@@ -21,7 +21,7 @@ func main() {
 		log.Fatalln("Problem scraping for rotten tomatoes movies:", err)
 	}
 
-	fmt.Printf("Successfully scraped movies from IMDB & Rotten Tomatoes")
+	fmt.Println("Successfully scraped movies from IMDB & Rotten Tomatoes")
 
 	err = api.NormalizeAndSend(imdbMovies, rottenTomatoesMovies)
 	if err != nil {

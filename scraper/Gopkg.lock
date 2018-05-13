@@ -82,6 +82,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/xrash/smetrics"
+  packages = ["."]
+  revision = "a3153f7040e90324c58c6287535e26a0ac5c1cc1"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -135,6 +141,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5d3d95a71f6018ac39016490112e87539e94d41adf11d49f9690b7d78bc5a74b"
+  inputs-digest = "7517c1e390d1d48365da7a3f932621dfb6f1b69949cb6e4df98584074258e0a9"
   solver-name = "gps-cdcl"
   solver-version = 1
