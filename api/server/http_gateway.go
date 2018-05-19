@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"log"
 
-	pb "github.com/PeppyS/what-to-watch/api/proto"
+	pb "github.com/PeppyS/what-to-watch/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 )

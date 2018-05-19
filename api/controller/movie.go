@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	pb "github.com/PeppyS/what-to-watch/api/proto"
+	pb "github.com/PeppyS/what-to-watch/proto"
 )
 
 type movieService interface {

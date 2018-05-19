@@ -1,5 +1,7 @@
 version: '3'
 services:
+  api:
+    build: ./api/
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
     ports:
