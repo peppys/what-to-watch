@@ -1,11 +1,12 @@
 package middleware
 
 import (
+	"context"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"golang.org/x/net/context"
 )
 
 // Authentication middleware

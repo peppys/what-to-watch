@@ -1,9 +1,10 @@
 package controller
 
 import (
+	"context"
+
 	"github.com/PeppyS/what-to-watch/proto"
 	google_proto_empty "github.com/golang/protobuf/ptypes/empty"
-	"golang.org/x/net/context"
 )
 
 // HealthController - TODO

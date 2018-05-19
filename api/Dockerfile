@@ -1,4 +1,4 @@
-FROM golang:1.8 as builder
+FROM golang:1.10 as builder
 WORKDIR $GOPATH/src/github.com/PeppyS/what-to-watch/api/
 
 # Install dep

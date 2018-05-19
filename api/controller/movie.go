@@ -2,9 +2,9 @@ package controller
 
 import (
 	"fmt"
+	"context"
 
 	pb "github.com/PeppyS/what-to-watch/proto"
-	"golang.org/x/net/context"
 )
 
 type movieService interface {
