@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/PeppyS/what-to-watch"
+  packages = ["proto"]
+  revision = "e5f1d1568f4ea9c6a325d5e083675d35d3b8dd6f"
+
+[[projects]]
   name = "github.com/golang/protobuf"
   packages = [
     "jsonpb",
@@ -111,6 +117,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d2b2b7ab241ce9ee710048fb3c0229cc9d29695635efea66dc2903b64bad448f"
+  inputs-digest = "65715db7504809a115cfd4db422c0d709b9013e0cd486d3e69109231cc682911"
   solver-name = "gps-cdcl"
   solver-version = 1

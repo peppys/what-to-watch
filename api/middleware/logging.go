@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"context"
 	"log"
 	"time"
 
 	"google.golang.org/grpc"
+	"golang.org/x/net/context"
 )
 
 // Logging middleware logs requests

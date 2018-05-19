@@ -1,0 +1,124 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/movie.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/movies": {
+      "post": {
+        "operationId": "Post",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/protoPostMoviesResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protoPostMoviesPayload"
+            }
+          }
+        ],
+        "tags": [
+          "MovieService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "PostMoviesPayloadIMDBMeta": {
+      "type": "object",
+      "properties": {
+        "genre": {
+          "type": "string"
+        },
+        "mpaa_rating": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "PostMoviesPayloadMovie": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "imdb_meta": {
+          "$ref": "#/definitions/PostMoviesPayloadIMDBMeta"
+        },
+        "rotten_tomatoes_meta": {
+          "$ref": "#/definitions/PostMoviesPayloadRottenTomatoesMeta"
+        }
+      }
+    },
+    "PostMoviesPayloadRottenTomatoesMeta": {
+      "type": "object",
+      "properties": {
+        "tomato_score": {
+          "type": "string",
+          "format": "int64"
+        },
+        "popcorn_score": {
+          "type": "string",
+          "format": "int64"
+        },
+        "theater_release_date": {
+          "type": "string"
+        },
+        "mpaa_rating": {
+          "type": "string"
+        },
+        "synopsis": {
+          "type": "string"
+        },
+        "synopsis_type": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        }
+      }
+    },
+    "protoPostMoviesPayload": {
+      "type": "object",
+      "properties": {
+        "movies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PostMoviesPayloadMovie"
+          }
+        }
+      }
+    },
+    "protoPostMoviesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    }
+  }
+}
