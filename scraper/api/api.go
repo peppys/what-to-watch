@@ -12,28 +12,28 @@ import (
 )
 
 type IMDBMeta struct {
-	Genre      string
-	MPAARating string
-	Score      float64
+	Genre      string  `json:"genre"`
+	MPAARating string  `json:"mpaa_rating"`
+	Score      float64 `json:"score"`
 }
 
 type RottenTomatoesMeta struct {
-	TomatoScore        int
-	PopcornScore       int
-	TheaterReleaseDate string
-	MpaaRating         string
-	Synopsis           string
-	SynopsisType       string
-	Runtime            string
+	TomatoScore        int    `json:"tomato_score"`
+	PopcornScore       int    `json:"popcorn_score"`
+	TheaterReleaseDate string `json:"theater_release_date"`
+	MpaaRating         string `json:"mpaa_rating"`
+	Synopsis           string `json:"synopsis"`
+	SynopsisType       string `json:"synopsis_type"`
+	Runtime            string `json:"runtime"`
 }
 
 type Movie struct {
-	Title string
-	IMDBMeta
-	RottenTomatoesMeta
+	Title              string `json:"title"`
+	IMDBMeta           `json:"imdb_meta"`
+	RottenTomatoesMeta `json:"rotten_tomatoes_meta"`
 }
 
-const PostEndpoint = "localhost:8080/movies"
+const PostEndpoint = "http://localhost:8080/movies"
 
 func NormalizeAndSend(i []imdb.Movie, r []rottentomatoes.Movie) error {
 	movies := Normalize(i, r)

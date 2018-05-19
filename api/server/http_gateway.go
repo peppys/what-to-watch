@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"net/http"
+	"log"
 
 	pb "github.com/PeppyS/what-to-watch/api/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -17,7 +18,7 @@ func ListenAndServeHTTPGateway(grpcAddress, httpAddress string) error {
 
 	mux := runtime.NewServeMux()
 	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
-	err := pb.RegisterResumeServiceHandlerFromEndpoint(ctx, mux, grpcAddress, dialOpts)
+	err := pb.RegisterMovieServiceHandlerFromEndpoint(ctx, mux, grpcAddress, dialOpts)
 	if err != nil {
 		return err
 	}
@@ -27,5 +28,6 @@ func ListenAndServeHTTPGateway(grpcAddress, httpAddress string) error {
 		return err
 	}
 
+	log.Println("Listening on", httpAddress)
 	return http.ListenAndServe(httpAddress, mux)
 }

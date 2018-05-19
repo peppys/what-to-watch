@@ -10,7 +10,7 @@ import (
 )
 
 // ListenAndServe - TODO
-func ListenAndServe(address string, resumeAPI pb.ResumeServiceServer, healthAPI pb.HealthServiceServer) error {
+func ListenAndServe(address string, movieAPI pb.MovieServiceServer, healthAPI pb.HealthServiceServer) error {
 	listen, err := net.Listen("tcp", address)
 	if err != nil {
 		return err
@@ -23,7 +23,7 @@ func ListenAndServe(address string, resumeAPI pb.ResumeServiceServer, healthAPI 
 		)),
 	)
 	pb.RegisterHealthServiceServer(server, healthAPI)
-	pb.RegisterResumeServiceServer(server, resumeAPI)
+	pb.RegisterMovieServiceServer(server, movieAPI)
 
 	return server.Serve(listen)
 }

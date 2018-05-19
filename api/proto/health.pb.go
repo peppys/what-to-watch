@@ -6,11 +6,12 @@ Package proto is a generated protocol buffer package.
 
 It is generated from these files:
 	proto/health.proto
-	proto/resume.proto
+	proto/movie.proto
 
 It has these top-level messages:
 	HealthResponse
-	ResumeResponse
+	PostMoviesPayload
+	PostMoviesResponse
 */
 package proto
 

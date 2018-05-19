@@ -1,0 +1,43 @@
+syntax = "proto3";
+package proto;
+
+import "google/api/annotations.proto";
+
+message PostMoviesPayload {
+    message IMDBMeta {
+        string genre = 1;
+        string mpaa_rating = 2;
+        float score = 3;
+    }
+
+    message RottenTomatoesMeta {
+        int64 tomato_score = 1;
+        int64 popcorn_score = 2;
+        string theater_release_date = 3;
+        string mpaa_rating = 4;
+        string synopsis = 5;
+        string synopsis_type = 6;
+        string runtime = 7;
+    }
+
+    message Movie {
+        string title = 1;
+        IMDBMeta imdb_meta = 2;
+        RottenTomatoesMeta rotten_tomatoes_meta = 3;
+    }
+
+    repeated Movie movies = 1;
+}
+
+message PostMoviesResponse {
+    bool success = 1;
+}
+
+service MovieService {
+    rpc Post(PostMoviesPayload) returns (PostMoviesResponse) {
+        option (google.api.http) = {
+            post: "/movies"
+            body: "*"
+        };
+    }
+}
