@@ -32,7 +32,7 @@ func main() {
 
 	fmt.Println("Successfully scraped movies from IMDB & Rotten Tomatoes")
 
-	apiClient := api.NewClient(API_URL)
+	apiClient := api.NewClient(http.DefaultClient, API_URL)
 	err = apiClient.NormalizeAndSend(imdbMovies, rottenTomatoesMovies)
 	if err != nil {
 		log.Fatalln("Problem normalzing and sending movies to API:", err)

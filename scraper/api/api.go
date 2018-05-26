@@ -11,6 +11,7 @@ import (
 )
 
 type APIClient struct {
+	httpClient *http.Client
 	url string
 }
 
@@ -36,8 +37,8 @@ type Movie struct {
 	RottenTomatoesMeta `json:"rotten_tomatoes_meta"`
 }
 
-func NewClient(u string) *APIClient {
-	return &APIClient{u}
+func NewClient(c *http.Client, u string) *APIClient {
+	return &APIClient{c, u}
 }
 
 func (a *APIClient) NormalizeAndSend(i []imdb.Movie, r []rottentomatoes.Movie) error {
@@ -102,7 +103,7 @@ func (a *APIClient) Send(m []Movie) error {
 		return fmt.Errorf("Failed to encode payload: %v", err)
 	}
 
-	_, err = http.Post("http://" + a.url + "/movies", "application/json", bytes.NewBuffer(b))
+	_, err = a.httpClient.Post("http://" + a.url + "/movies", "application/json", bytes.NewBuffer(b))
 
 	return err
 }
