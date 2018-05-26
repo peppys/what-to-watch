@@ -35,7 +35,7 @@ func NewScraper(c *colly.Collector) *Scraper {
 	return &Scraper{c}
 }
 
-func (s *Scraper) Scrape() []Movie {
+func (s *Scraper) Scrape() ([]Movie, error) {
 	var movies []Movie
 
 	// Crawl all movies in theaters
@@ -61,9 +61,12 @@ func (s *Scraper) Scrape() []Movie {
 		})
 	})
 
-	s.Visit(moviesInTheatersPage)
+	err := s.Visit(moviesInTheatersPage)
+	if err != nil {
+		return nil, err
+	}
 
 	s.Wait()
 
-	return movies
+	return movies, nil
 }

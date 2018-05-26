@@ -4,14 +4,26 @@ services:
     build: ./api/
     depends_on:
       - elasticsearch
+    environment:
+      - GRPC_PORT=50051
+      - HTTP_PORT=8080
+      - ELASTICSEARCH_URL=elasticsearch:9200
     ports:
       - 8080:8080
 
-  # scraper:
-  #   build: ./scraper/
+  scraper:
+    build: ./scraper/
+    depends_on: 
+      - api
+    environment: 
+      - API_URL=api:8080
 
   elasticsearch:
-    image: elasticsearch
+    build: ./elasticsearch
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/mounted_data
+    ports:
+      - 9200:9200
 
   kibana:
     image: kibana

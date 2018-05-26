@@ -2,13 +2,14 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"context"
 
 	pb "github.com/PeppyS/what-to-watch/proto"
 )
 
 type movieService interface {
-	Get() error
+	AddBulk(movies []*pb.PostMoviesPayload_Movie) error
 }
 
 // MovieController defines controller structure
@@ -24,13 +25,13 @@ func NewMovie(s movieService) *MovieController {
 }
 
 // Post adds movies to ES index
-func (c *MovieController) Post(ctx context.Context, movies *pb.PostMoviesPayload) (*pb.PostMoviesResponse, error) {
-	err := c.service.Get()
+func (c *MovieController) Post(ctx context.Context, payload *pb.PostMoviesPayload) (*pb.PostMoviesResponse, error) {
+	err := c.service.AddBulk(payload.Movies)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error bulk posting %v", err)
 	}
 
-	fmt.Println("Movies:", movies)
+	log.Println("Successfully uploaded", len(payload.Movies), "movies")
 
 	return &pb.PostMoviesResponse{
 		Success: true,

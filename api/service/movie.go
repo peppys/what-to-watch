@@ -1,16 +1,23 @@
 package service
 
+import (
+	"github.com/PeppyS/what-to-watch/proto"
+)
+
+type elasticSearchClient interface {
+	BulkPostMovies(movies []*proto.PostMoviesPayload_Movie) error
+}
+
 // MovieService defines service structure
 type MovieService struct {
-	// TODO add ES Client
+	esClient elasticSearchClient
 }
 
 // NewMovie instantiates MovieService
-func NewMovie() *MovieService {
-	return &MovieService{}
+func NewMovie(esClient elasticSearchClient) *MovieService {
+	return &MovieService{esClient}
 }
 
-// Get returns movie
-func (rs *MovieService) Get() (error) {
-	return nil
+func (s *MovieService) AddBulk(movies []*proto.PostMoviesPayload_Movie) error {
+	return s.esClient.BulkPostMovies(movies)
 }

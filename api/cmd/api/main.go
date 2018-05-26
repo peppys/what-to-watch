@@ -1,9 +1,9 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"log"
+	"net/http"
+	"os"
 
 	"github.com/PeppyS/what-to-watch/api/controller"
 	"github.com/PeppyS/what-to-watch/api/server"
@@ -11,19 +11,21 @@ import (
 )
 
 func main() {
-	ip := flag.String("ip", "", "IP address to use")
-	port := flag.String("port", "8080", "Port to use")
-
-	flag.Parse()
-
-	httpAddress := fmt.Sprintf("%s:%s", *ip, *port)
+	grpcPort := ":" + os.Getenv("GRPC_PORT")
+	httpPort := ":" + os.Getenv("HTTP_PORT")
+	elasticSearchURL := os.Getenv("ELASTICSEARCH_URL")
 
 	healthAPI := controller.NewHealth()
 	movieAPI := controller.NewMovie(
-		service.NewMovie(),
+		service.NewMovie(
+			service.NewElasticsearchClient(
+				http.DefaultClient,
+				elasticSearchURL,
+			),
+		),
 	)
 
-	go server.ListenAndServe(":50051", movieAPI, healthAPI)
+	go server.ListenAndServe(grpcPort, movieAPI, healthAPI)
 
-	log.Fatal(server.ListenAndServeHTTPGateway(":50051", httpAddress))
+	log.Fatal(server.ListenAndServeHTTPGateway(grpcPort, httpPort))
 }

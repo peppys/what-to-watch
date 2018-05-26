@@ -8,8 +8,11 @@ import (
 
 	"github.com/PeppyS/what-to-watch/scraper/imdb"
 	"github.com/PeppyS/what-to-watch/scraper/rottentomatoes"
-	"github.com/xrash/smetrics"
 )
+
+type APIClient struct {
+	url string
+}
 
 type IMDBMeta struct {
 	Genre      string  `json:"genre"`
@@ -33,85 +36,65 @@ type Movie struct {
 	RottenTomatoesMeta `json:"rotten_tomatoes_meta"`
 }
 
-const PostEndpoint = "http://localhost:8080/movies"
-
-func NormalizeAndSend(i []imdb.Movie, r []rottentomatoes.Movie) error {
-	movies := Normalize(i, r)
-
-	return Send(movies)
+func NewClient(u string) *APIClient {
+	return &APIClient{u}
 }
 
-func Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie {
-	var movies []Movie
-	const minimumWagnerFischerDistance = 3
+func (a *APIClient) NormalizeAndSend(i []imdb.Movie, r []rottentomatoes.Movie) error {
+	movies := a.Normalize(i, r)
+	fmt.Println(movies)
 
-	// Find potential duplicates
-	for imdbIndex, imdbMovie := range i {
-		for rottenIndex, rottenMovie := range r {
-			score := smetrics.WagnerFischer(imdbMovie.Title, rottenMovie.Title, 1, 1, 2)
+	return a.Send(movies)
+}
 
-			if score <= minimumWagnerFischerDistance {
-				// Combine movies and add to movie list
-				movies = append(movies, Movie{
-					imdbMovie.Title,
-					IMDBMeta{
-						imdbMovie.Genre,
-						imdbMovie.Rating,
-						imdbMovie.MovieRating,
-					},
-					RottenTomatoesMeta{
-						rottenMovie.TomatoScore,
-						rottenMovie.PopcornScore,
-						rottenMovie.TheaterReleaseDate,
-						rottenMovie.MpaaRating,
-						rottenMovie.Synopsis,
-						rottenMovie.SynopsisType,
-						rottenMovie.Runtime,
-					},
-				})
+func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie {
+	movies := make(map[string]Movie)
 
-				// Remove from pending list to normalize
-				i = append(i[:imdbIndex], i[:imdbIndex+1]...)
-				r = append(r[:rottenIndex], r[:rottenIndex+1]...)
-
+	// Add IMDB movies
+	for _, movie := range i {
+		if _, set := movies[movie.Title]; !set {
+			movies[movie.Title] = Movie{
+				movie.Title,
+				IMDBMeta{
+					movie.Genre,
+					movie.Rating,
+					movie.MovieRating,
+				},
+				RottenTomatoesMeta{},
 			}
 		}
 	}
 
-	// Add remaining IMDB movies
-	for _, movie := range i {
-		movies = append(movies, Movie{
-			movie.Title,
-			IMDBMeta{
-				movie.Genre,
-				movie.Rating,
-				movie.MovieRating,
-			},
-			RottenTomatoesMeta{},
-		})
-	}
-
-	// Add remaining rotten tomatoes movies
+	// Add rotten tomatoes movies
 	for _, movie := range r {
-		movies = append(movies, Movie{
-			movie.Title,
-			IMDBMeta{},
-			RottenTomatoesMeta{
-				movie.TomatoScore,
-				movie.PopcornScore,
-				movie.TheaterReleaseDate,
-				movie.MpaaRating,
-				movie.Synopsis,
-				movie.SynopsisType,
-				movie.Runtime,
-			},
-		})
+		if _, set := movies[movie.Title]; !set {
+			movies[movie.Title] = Movie{
+				movie.Title,
+				IMDBMeta{},
+				RottenTomatoesMeta{
+					movie.TomatoScore,
+					movie.PopcornScore,
+					movie.TheaterReleaseDate,
+					movie.MpaaRating,
+					movie.Synopsis,
+					movie.SynopsisType,
+					movie.Runtime,
+				},
+			}
+		}
 	}
 
-	return movies
+
+	// Parse and return values
+	values := make([]Movie, 0, len(movies))
+	for _, value := range movies {
+		values = append(values, value)
+	}
+
+	return values
 }
 
-func Send(m []Movie) error {
+func (a *APIClient) Send(m []Movie) error {
 	b, err := json.Marshal(map[string][]Movie{
 		"movies": m,
 	})
@@ -119,7 +102,7 @@ func Send(m []Movie) error {
 		return fmt.Errorf("Failed to encode payload: %v", err)
 	}
 
-	_, err = http.Post(PostEndpoint, "application/json", bytes.NewBuffer(b))
+	_, err = http.Post("http://" + a.url + "/movies", "application/json", bytes.NewBuffer(b))
 
 	return err
 }

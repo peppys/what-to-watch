@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/PeppyS/what-to-watch/scraper/api"
 	"github.com/PeppyS/what-to-watch/scraper/imdb"
@@ -11,11 +12,19 @@ import (
 	"github.com/gocolly/colly"
 )
 
+var (
+	API_URL = os.Getenv("API_URL")
+)
+
 func main() {
 	imdbScraper := imdb.NewScraper(colly.NewCollector())
 	rottenTomatoesScraper := rottentomatoes.NewScraper(&http.Client{})
 
-	imdbMovies := imdbScraper.Scrape()
+	imdbMovies, err := imdbScraper.Scrape()
+	if err != nil {
+		log.Fatalln("Problem scraping for IMDB movies:", err)
+	}
+
 	rottenTomatoesMovies, err := rottenTomatoesScraper.Scrape()
 	if err != nil {
 		log.Fatalln("Problem scraping for rotten tomatoes movies:", err)
@@ -23,7 +32,8 @@ func main() {
 
 	fmt.Println("Successfully scraped movies from IMDB & Rotten Tomatoes")
 
-	err = api.NormalizeAndSend(imdbMovies, rottenTomatoesMovies)
+	apiClient := api.NewClient(API_URL)
+	err = apiClient.NormalizeAndSend(imdbMovies, rottenTomatoesMovies)
 	if err != nil {
 		log.Fatalln("Problem normalzing and sending movies to API:", err)
 	}
