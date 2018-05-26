@@ -34,7 +34,7 @@ message PostMoviesResponse {
 }
 
 service MovieService {
-    rpc Post(PostMoviesPayload) returns (PostMoviesResponse) {
+    rpc BulkIndex(PostMoviesPayload) returns (PostMoviesResponse) {
         option (google.api.http) = {
             post: "/movies"
             body: "*"

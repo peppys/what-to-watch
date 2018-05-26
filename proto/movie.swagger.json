@@ -17,7 +17,7 @@
   "paths": {
     "/movies": {
       "post": {
-        "operationId": "Post",
+        "operationId": "BulkIndex",
         "responses": {
           "200": {
             "description": "",

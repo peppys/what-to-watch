@@ -28,7 +28,7 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
-func request_MovieService_Post_0(ctx context.Context, marshaler runtime.Marshaler, client MovieServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_MovieService_BulkIndex_0(ctx context.Context, marshaler runtime.Marshaler, client MovieServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq PostMoviesPayload
 	var metadata runtime.ServerMetadata
 
@@ -36,7 +36,7 @@ func request_MovieService_Post_0(ctx context.Context, marshaler runtime.Marshale
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.Post(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.BulkIndex(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
@@ -79,7 +79,7 @@ func RegisterMovieServiceHandler(ctx context.Context, mux *runtime.ServeMux, con
 // "MovieServiceClient" to call the correct interceptors.
 func RegisterMovieServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client MovieServiceClient) error {
 
-	mux.Handle("POST", pattern_MovieService_Post_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_MovieService_BulkIndex_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		if cn, ok := w.(http.CloseNotifier); ok {
@@ -97,14 +97,14 @@ func RegisterMovieServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_MovieService_Post_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_MovieService_BulkIndex_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_MovieService_Post_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_MovieService_BulkIndex_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -112,9 +112,9 @@ func RegisterMovieServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_MovieService_Post_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"movies"}, ""))
+	pattern_MovieService_BulkIndex_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"movies"}, ""))
 )
 
 var (
-	forward_MovieService_Post_0 = runtime.ForwardResponseMessage
+	forward_MovieService_BulkIndex_0 = runtime.ForwardResponseMessage
 )
