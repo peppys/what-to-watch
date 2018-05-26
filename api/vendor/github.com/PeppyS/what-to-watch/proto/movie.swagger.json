@@ -16,8 +16,22 @@
   ],
   "paths": {
     "/movies": {
+      "get": {
+        "operationId": "Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/protoMoviesList"
+            }
+          }
+        },
+        "tags": [
+          "MovieService"
+        ]
+      },
       "post": {
-        "operationId": "Post",
+        "operationId": "BulkIndex",
         "responses": {
           "200": {
             "description": "",
@@ -32,7 +46,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/protoPostMoviesPayload"
+              "$ref": "#/definitions/protoMoviesList"
             }
           }
         ],
@@ -43,7 +57,7 @@
     }
   },
   "definitions": {
-    "PostMoviesPayloadIMDBMeta": {
+    "MoviesListIMDBMeta": {
       "type": "object",
       "properties": {
         "genre": {
@@ -58,21 +72,21 @@
         }
       }
     },
-    "PostMoviesPayloadMovie": {
+    "MoviesListMovie": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string"
         },
         "imdb_meta": {
-          "$ref": "#/definitions/PostMoviesPayloadIMDBMeta"
+          "$ref": "#/definitions/MoviesListIMDBMeta"
         },
         "rotten_tomatoes_meta": {
-          "$ref": "#/definitions/PostMoviesPayloadRottenTomatoesMeta"
+          "$ref": "#/definitions/MoviesListRottenTomatoesMeta"
         }
       }
     },
-    "PostMoviesPayloadRottenTomatoesMeta": {
+    "MoviesListRottenTomatoesMeta": {
       "type": "object",
       "properties": {
         "tomato_score": {
@@ -100,13 +114,13 @@
         }
       }
     },
-    "protoPostMoviesPayload": {
+    "protoMoviesList": {
       "type": "object",
       "properties": {
         "movies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PostMoviesPayloadMovie"
+            "$ref": "#/definitions/MoviesListMovie"
           }
         }
       }
