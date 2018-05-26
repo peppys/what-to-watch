@@ -5,7 +5,7 @@ import (
 )
 
 type elasticSearchClient interface {
-	BulkPostMovies(movies []*proto.PostMoviesPayload_Movie) error
+	BulkIndexMovies(movies []*proto.MoviesList_Movie) error
 }
 
 // MovieService defines service structure
@@ -18,6 +18,6 @@ func NewMovie(esClient elasticSearchClient) *MovieService {
 	return &MovieService{esClient}
 }
 
-func (s *MovieService) AddBulk(movies []*proto.PostMoviesPayload_Movie) error {
-	return s.esClient.BulkPostMovies(movies)
+func (s *MovieService) BulkIndex(movies []*proto.MoviesList_Movie) error {
+	return s.esClient.BulkIndexMovies(movies)
 }

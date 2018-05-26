@@ -23,7 +23,23 @@ func NewElasticsearchClient(c *http.Client, url string) *ElasticsearchClient {
 	return &ElasticsearchClient{c, url}
 }
 
-func (c *ElasticsearchClient) BulkPostMovies(movies []*proto.PostMoviesPayload_Movie) error {
+func (c *ElasticsearchClient) ClearMovieIndex() error {
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/%s", c.url, movieIndex), nil)
+	if err != nil {
+		return fmt.Errorf("Failed creating request: %v", err)
+	}
+
+	_, err = c.httpClient.Do(req)
+
+	return err
+}
+
+func (c *ElasticsearchClient) BulkIndexMovies(movies []*proto.MoviesList_Movie) error {
+	err := c.ClearMovieIndex()
+	if err != nil {
+		return fmt.Errorf("Problem clearing movie index: %v", err)
+	}
+
 	for _, movie := range movies {
 		b, err := json.Marshal(movie)
 		if err != nil {
