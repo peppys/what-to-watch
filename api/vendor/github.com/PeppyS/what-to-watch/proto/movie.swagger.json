@@ -90,12 +90,12 @@
       "type": "object",
       "properties": {
         "tomato_score": {
-          "type": "string",
-          "format": "int64"
+          "type": "integer",
+          "format": "int32"
         },
         "popcorn_score": {
-          "type": "string",
-          "format": "int64"
+          "type": "integer",
+          "format": "int32"
         },
         "theater_release_date": {
           "type": "string"

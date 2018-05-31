@@ -11,6 +11,7 @@ import (
 
 type movieService interface {
 	BulkIndex(movies []*proto.MoviesList_Movie) error
+	GetAll() ([]*proto.MoviesList_Movie, error)
 }
 
 // MovieController defines controller structure
@@ -40,5 +41,12 @@ func (c *MovieController) BulkIndex(ctx context.Context, payload *proto.MoviesLi
 }
 
 func (c *MovieController) Get(ctx context.Context, empty *google_proto_empty.Empty) (*proto.MoviesList, error) {
-	return &proto.MoviesList{}, nil
+	movies, err := c.service.GetAll()
+	if err != nil {
+		return nil, fmt.Errorf("Error getting movies %v", err)
+	}
+
+	return &proto.MoviesList{
+		Movies: movies,
+	}, nil
 }

@@ -58,3 +58,35 @@ func (c *ElasticsearchClient) BulkIndexMovies(movies []*proto.MoviesList_Movie) 
 
 	return nil
 }
+
+func (c *ElasticsearchClient) GetAllMovies() ([]*proto.MoviesList_Movie, error) {
+	query := "_search/?size=1000"
+
+	resp, err := c.httpClient.Get(
+		fmt.Sprintf("http://%s/%s/%s", c.url, movieIndex, query),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("Failed sending request: %v", err)
+	}
+
+	var MovieSearchResults struct {
+		Hits struct {
+			Hits []struct {
+				Movie *proto.MoviesList_Movie `json:"_source"`
+			} `json:"hits"`
+		} `json:"hits"`
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&MovieSearchResults)
+	if err != nil {
+		return nil, fmt.Errorf("Failed json decoding search results: %v", err)
+	}
+
+	var movies []*proto.MoviesList_Movie
+
+	for _, movieHit := range MovieSearchResults.Hits.Hits {
+		movies = append(movies, movieHit.Movie)
+	}
+
+	return movies, nil
+}

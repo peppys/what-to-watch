@@ -40,7 +40,7 @@ func (s *Scraper) Scrape() ([]Movie, error) {
 
 	// Crawl all movies in theaters
 	s.OnHTML(linkSelector, func(e *colly.HTMLElement) {
-		go e.Request.Visit(strings.Replace(e.Attr("href"), "/showtimes", "", 1))
+		e.Request.Visit(strings.Replace(e.Attr("href"), "/showtimes", "", 1))
 	})
 
 	// Scrape movie info

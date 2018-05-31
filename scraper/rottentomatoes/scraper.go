@@ -45,9 +45,5 @@ func (s *Scraper) Scrape() ([]Movie, error) {
 		return movies, err
 	}
 
-	for _, movie := range moviesAPIResponse.Results {
-		movies = append(movies, movie)
-	}
-
-	return movies, nil
+	return moviesAPIResponse.Results, nil
 }

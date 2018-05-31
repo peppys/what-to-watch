@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,11 +12,15 @@ import (
 )
 
 var (
-	API_URL = os.Getenv("API_URL")
+	APIURL = os.Getenv("API_URL")
 )
 
 func main() {
-	imdbScraper := imdb.NewScraper(colly.NewCollector())
+	imdbScraper := imdb.NewScraper(
+		colly.NewCollector(
+			colly.Async(true),
+		),
+	)
 	rottenTomatoesScraper := rottentomatoes.NewScraper(&http.Client{})
 
 	imdbMovies, err := imdbScraper.Scrape()
@@ -30,13 +33,13 @@ func main() {
 		log.Fatalln("Problem scraping for rotten tomatoes movies:", err)
 	}
 
-	fmt.Println("Successfully scraped movies from IMDB & Rotten Tomatoes")
+	log.Println("Successfully scraped movies from IMDB & Rotten Tomatoes")
 
-	apiClient := api.NewClient(http.DefaultClient, API_URL)
+	apiClient := api.NewClient(http.DefaultClient, APIURL)
 	err = apiClient.NormalizeAndSend(imdbMovies, rottenTomatoesMovies)
 	if err != nil {
 		log.Fatalln("Problem normalzing and sending movies to API:", err)
 	}
 
-	fmt.Println("Successfully finished scraping and sending movies to API")
+	log.Println("Successfully finished scraping and sending movies to API")
 }

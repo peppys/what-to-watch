@@ -4,20 +4,25 @@ import (
 	"github.com/PeppyS/what-to-watch/proto"
 )
 
-type elasticSearchClient interface {
+type elasticsearchClient interface {
 	BulkIndexMovies(movies []*proto.MoviesList_Movie) error
+	GetAllMovies() ([]*proto.MoviesList_Movie, error)
 }
 
 // MovieService defines service structure
 type MovieService struct {
-	esClient elasticSearchClient
+	esClient elasticsearchClient
 }
 
 // NewMovie instantiates MovieService
-func NewMovie(esClient elasticSearchClient) *MovieService {
+func NewMovie(esClient elasticsearchClient) *MovieService {
 	return &MovieService{esClient}
 }
 
 func (s *MovieService) BulkIndex(movies []*proto.MoviesList_Movie) error {
 	return s.esClient.BulkIndexMovies(movies)
+}
+
+func (s *MovieService) GetAll() ([]*proto.MoviesList_Movie, error) {
+	return s.esClient.GetAllMovies()
 }

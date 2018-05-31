@@ -20,7 +20,7 @@ curl -X PUT "http://localhost:9200/movies/" -d '{
                             "type": "text"
                         },
                         "score": {
-                            "type": "text"
+                            "type": "float"
                         }
                     }
                 },

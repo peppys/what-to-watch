@@ -12,8 +12,8 @@ message MoviesList {
     }
 
     message RottenTomatoesMeta {
-        int64 tomato_score = 1;
-        int64 popcorn_score = 2;
+        int32 tomato_score = 1;
+        int32 popcorn_score = 2;
         string theater_release_date = 3;
         string mpaa_rating = 4;
         string synopsis = 5;

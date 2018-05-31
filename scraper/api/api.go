@@ -12,7 +12,7 @@ import (
 
 type APIClient struct {
 	httpClient *http.Client
-	url string
+	url        string
 }
 
 type IMDBMeta struct {
@@ -49,47 +49,66 @@ func (a *APIClient) NormalizeAndSend(i []imdb.Movie, r []rottentomatoes.Movie) e
 }
 
 func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie {
-	movies := make(map[string]Movie)
-
+	movies := make(map[string]*Movie)
+	fmt.Println(i)
+	fmt.Println(r)
+	
 	// Add IMDB movies
 	for _, movie := range i {
-		if _, set := movies[movie.Title]; !set {
-			movies[movie.Title] = Movie{
+		imdbMeta := IMDBMeta{
+			movie.Genre,
+			movie.Rating,
+			movie.MovieRating,
+		}
+
+		if m, set := movies[movie.Title]; !set {
+			movies[movie.Title] = &Movie{
 				movie.Title,
-				IMDBMeta{
-					movie.Genre,
-					movie.Rating,
-					movie.MovieRating,
-				},
+				imdbMeta,
 				RottenTomatoesMeta{},
+			}
+		} else {
+			// Add IMDB meta to existing movie
+			movies[movie.Title] = &Movie{
+				m.Title,
+				imdbMeta,
+				m.RottenTomatoesMeta,
 			}
 		}
 	}
 
 	// Add rotten tomatoes movies
 	for _, movie := range r {
-		if _, set := movies[movie.Title]; !set {
-			movies[movie.Title] = Movie{
+		rottenTomatoesMeta := RottenTomatoesMeta{
+			movie.TomatoScore,
+			movie.PopcornScore,
+			movie.TheaterReleaseDate,
+			movie.MpaaRating,
+			movie.Synopsis,
+			movie.SynopsisType,
+			movie.Runtime,
+		}
+
+		if m, set := movies[movie.Title]; !set {
+			movies[movie.Title] = &Movie{
 				movie.Title,
 				IMDBMeta{},
-				RottenTomatoesMeta{
-					movie.TomatoScore,
-					movie.PopcornScore,
-					movie.TheaterReleaseDate,
-					movie.MpaaRating,
-					movie.Synopsis,
-					movie.SynopsisType,
-					movie.Runtime,
-				},
+				rottenTomatoesMeta,
+			}
+		} else {
+			// Add RottenTomatoes meta to existing movie
+			movies[movie.Title] = &Movie{
+				m.Title,
+				m.IMDBMeta,
+				rottenTomatoesMeta,
 			}
 		}
 	}
 
-
 	// Parse and return values
 	values := make([]Movie, 0, len(movies))
 	for _, value := range movies {
-		values = append(values, value)
+		values = append(values, *value)
 	}
 
 	return values
@@ -103,7 +122,7 @@ func (a *APIClient) Send(m []Movie) error {
 		return fmt.Errorf("Failed to encode payload: %v", err)
 	}
 
-	_, err = a.httpClient.Post("http://" + a.url + "/movies", "application/json", bytes.NewBuffer(b))
+	_, err = a.httpClient.Post("http://"+a.url+"/movies", "application/json", bytes.NewBuffer(b))
 
 	return err
 }
