@@ -5,6 +5,7 @@ import (
 )
 
 type elasticsearchClient interface {
+	AutocompleteMovies(s string) ([]*proto.MoviesList_Movie, error)
 	BulkIndexMovies(movies []*proto.MoviesList_Movie) error
 	GetAllMovies() ([]*proto.MoviesList_Movie, error)
 }
@@ -17,6 +18,10 @@ type MovieService struct {
 // NewMovie instantiates MovieService
 func NewMovie(esClient elasticsearchClient) *MovieService {
 	return &MovieService{esClient}
+}
+
+func (s *MovieService) Autocomplete(text string) ([]*proto.MoviesList_Movie, error) {
+	return s.esClient.AutocompleteMovies(text)
 }
 
 func (s *MovieService) BulkIndex(movies []*proto.MoviesList_Movie) error {

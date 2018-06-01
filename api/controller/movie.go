@@ -10,6 +10,7 @@ import (
 )
 
 type movieService interface {
+	Autocomplete(s string) ([]*proto.MoviesList_Movie, error)
 	BulkIndex(movies []*proto.MoviesList_Movie) error
 	GetAll() ([]*proto.MoviesList_Movie, error)
 }
@@ -24,6 +25,18 @@ func NewMovie(s movieService) *MovieController {
 	return &MovieController{
 		service: s,
 	}
+}
+
+// Autocomplete returns movie title suggestions based on given text
+func (c *MovieController) Autocomplete(ctx context.Context, payload *proto.Search) (*proto.MoviesList, error) {
+	movies, err := c.service.Autocomplete(payload.Text)
+	if err != nil {
+		return nil, fmt.Errorf("Error searching for autocomplete suggestions %v", err)
+	}
+
+	return &proto.MoviesList{
+		Movies: movies,
+	}, nil
 }
 
 // BulkIndex adds movies to ES index

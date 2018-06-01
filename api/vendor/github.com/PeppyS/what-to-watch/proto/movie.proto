@@ -34,7 +34,17 @@ message PostMoviesResponse {
     bool success = 1;
 }
 
+message Search {
+    string text = 1;
+}
+
 service MovieService {
+    rpc Autocomplete(Search) returns (MoviesList) {
+        option (google.api.http) = {
+            get: "/movies/autocomplete/{text}"
+        };
+    }
+
     rpc BulkIndex(MoviesList) returns (PostMoviesResponse) {
         option (google.api.http) = {
             post: "/movies"

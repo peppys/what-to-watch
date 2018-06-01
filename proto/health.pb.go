@@ -12,6 +12,7 @@ It has these top-level messages:
 	HealthResponse
 	MoviesList
 	PostMoviesResponse
+	Search
 */
 package proto
 

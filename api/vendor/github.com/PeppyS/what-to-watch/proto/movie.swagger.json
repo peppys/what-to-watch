@@ -54,6 +54,30 @@
           "MovieService"
         ]
       }
+    },
+    "/movies/autocomplete/{text}": {
+      "get": {
+        "operationId": "Autocomplete",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/protoMoviesList"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "text",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MovieService"
+        ]
+      }
     }
   },
   "definitions": {

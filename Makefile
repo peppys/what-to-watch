@@ -18,4 +18,4 @@ protofiles:
   		--swagger_out=logtostderr=true:. \
   		proto/*.proto
 run-api:
-	go run api/cmd/api/main.go
+	GRPC_PORT=50051 HTTP_PORT=8080 ELASTICSEARCH_URL=localhost:9200 go run api/cmd/api/main.go

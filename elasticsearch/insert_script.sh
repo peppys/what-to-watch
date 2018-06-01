@@ -8,7 +8,7 @@ curl -X PUT "http://localhost:9200/movies/" -d '{
         "movie": {
             "properties": {
                 "title": {
-                    "type": "text"
+                    "type": "completion"
                 },
                 "imdb_meta": {
                     "type": "nested",

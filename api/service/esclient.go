@@ -23,6 +23,10 @@ func NewElasticsearchClient(c *http.Client, url string) *ElasticsearchClient {
 	return &ElasticsearchClient{c, url}
 }
 
+func (s *MovieService) AutocompleteMovies(text string) ([]*proto.MoviesList_Movie, error) {
+	return nil, nil
+}
+
 func (c *ElasticsearchClient) ClearMovieIndex() error {
 	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/%s", c.url, movieIndex), nil)
 	if err != nil {
