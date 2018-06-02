@@ -23,12 +23,61 @@ func NewElasticsearchClient(c *http.Client, url string) *ElasticsearchClient {
 	return &ElasticsearchClient{c, url}
 }
 
-func (s *MovieService) AutocompleteMovies(text string) ([]*proto.MoviesList_Movie, error) {
-	return nil, nil
+func (c *ElasticsearchClient) AutocompleteMovies(text string) ([]*proto.MoviesList_Movie, error) {
+	b := []byte(`{
+		"suggest": {
+			"movie-suggestions" : {
+				"prefix" : "` + text + `", 
+				"completion" : { 
+					"field" : "title.completion"
+				}
+			}
+		}
+	}`)
+
+	resp, err := http.Post(fmt.Sprintf("http://%s/%s/_search", c.url, movieIndex), "application/json", bytes.NewBuffer(b))
+	if err != nil {
+		return nil, fmt.Errorf("Failed sending request: %v", err)
+	}
+
+	var AutocompleteResults struct {
+		Suggest struct {
+			MovieSuggestions []struct {
+				Options []struct {
+					Movie *proto.MoviesList_Movie `json:"_source"`
+				} `json:"options"`
+				Movie *proto.MoviesList_Movie `json:"_source"`
+			} `json:"movie-suggestions"`
+		} `json:"suggest"`
+	}
+
+	err = json.NewDecoder(resp.Body).Decode(&AutocompleteResults)
+	if err != nil {
+		return nil, fmt.Errorf("Failed json decoding search results: %v", err)
+	}
+
+	var movies []*proto.MoviesList_Movie
+
+	for _, suggestions := range AutocompleteResults.Suggest.MovieSuggestions {
+		for _, option := range suggestions.Options {
+			movies = append(movies, option.Movie)
+		}
+	}
+
+	return movies, nil
 }
 
 func (c *ElasticsearchClient) ClearMovieIndex() error {
-	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/%s", c.url, movieIndex), nil)
+	b, err := json.Marshal(map[string]map[string][]string{
+		"query": map[string][]string{
+			"match_all": []string{},
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("Failed to encode payload: %v", err)
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/%s/_query", c.url, movieIndex), bytes.NewBuffer(b))
 	if err != nil {
 		return fmt.Errorf("Failed creating request: %v", err)
 	}

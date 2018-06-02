@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/PeppyS/what-to-watch"
   packages = ["proto"]
-  revision = "6265ed2aef009c33d6b0defe4ecc7d9e1adf8cbd"
+  revision = "aa2fbb8d950602413a06538f7ac1215b657c468a"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -51,7 +51,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "dfa909b99c79129e1100513e5cd36307665e5723"
+  revision = "1e491301e022f8f977054da4c2d852decd59571f"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -81,7 +81,7 @@
     "googleapis/api/annotations",
     "googleapis/rpc/status"
   ]
-  revision = "694d95ba50e67b2e363f3483057db5d4910c18f9"
+  revision = "81158efcc9f219c511e4d3c0d61a0e6e49c01a24"
 
 [[projects]]
   name = "google.golang.org/grpc"

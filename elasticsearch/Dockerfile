@@ -1,7 +1,4 @@
-FROM elasticsearch
-
-# Setup data path Maybe do this from docker compose?
-RUN echo 'path.data: /usr/share/elasticsearch/mounted_data' >> config/elasticsearch.yml
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.1.4
 
 # Get wait-for-it-script
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/e1f115e4ca285c3c24e847c4dd4be955e0ed51c2/wait-for-it.sh /utils/wait-for-it.sh
@@ -11,6 +8,7 @@ COPY entrypoint.sh ./
 COPY insert_script.sh ./
 
 # Make executable
+USER root
 RUN chmod +x ./entrypoint.sh
 RUN chmod +x ./insert_script.sh
 

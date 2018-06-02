@@ -3,12 +3,17 @@
 
 echo Creating movie index...
 
-curl -X PUT "http://localhost:9200/movies/" -d '{
+curl -X PUT "http://localhost:9200/movies/" -H "Content-Type: application/json" -d '{
     "mappings": {
         "movie": {
             "properties": {
                 "title": {
-                    "type": "completion"
+                    "type": "text",
+                    "fields": {
+                        "completion": {
+                            "type": "completion"
+                        }
+                    }
                 },
                 "imdb_meta": {
                     "type": "nested",
