@@ -68,21 +68,13 @@ func (c *ElasticsearchClient) AutocompleteMovies(text string) ([]*proto.MoviesLi
 }
 
 func (c *ElasticsearchClient) ClearMovieIndex() error {
-	b, err := json.Marshal(map[string]map[string][]string{
-		"query": map[string][]string{
-			"match_all": []string{},
-		},
-	})
-	if err != nil {
-		return fmt.Errorf("Failed to encode payload: %v", err)
-	}
+	b := []byte(`{
+		"query": {
+			"match_all" : {}
+		}
+	}`)
 
-	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/%s/_query", c.url, movieIndex), bytes.NewBuffer(b))
-	if err != nil {
-		return fmt.Errorf("Failed creating request: %v", err)
-	}
-
-	_, err = c.httpClient.Do(req)
+	_, err := http.Post(fmt.Sprintf("http://%s/%s/_delete_by_query", c.url, movieIndex), "application/json", bytes.NewBuffer(b))
 
 	return err
 }
