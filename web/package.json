@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "env-cmd": "^8.0.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
