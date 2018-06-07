@@ -18,6 +18,7 @@ const (
 	ratingSelector      = "div.title_wrapper div meta[itemprop=contentRating]"
 	movieRatingSelector = "div.imdbRating span[itemprop=ratingValue]"
 	genreSelector       = "div.title_wrapper a span"
+	imageSelector       = "div.poster > a > img"
 )
 
 type Movie struct {
@@ -25,6 +26,7 @@ type Movie struct {
 	Rating      string
 	MovieRating float64
 	Genre       string
+	Image 		string
 }
 
 type Scraper struct {
@@ -52,12 +54,14 @@ func (s *Scraper) Scrape() ([]Movie, error) {
 		rating := strings.TrimSpace(e.ChildAttr(ratingSelector, "content"))
 		movieRating, _ := strconv.ParseFloat(strings.TrimSpace(e.ChildText(movieRatingSelector)), 64)
 		genre := strings.TrimSpace(e.ChildText(genreSelector))
+		image := e.ChildAttr(imageSelector, "src")
 
 		movies = append(movies, Movie{
 			title,
 			rating,
 			movieRating,
 			genre,
+			image,
 		})
 	})
 

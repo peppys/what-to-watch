@@ -15,6 +15,9 @@ curl -X PUT "http://localhost:9200/movies/" -H "Content-Type: application/json" 
                         }
                     }
                 },
+                "image": {
+                    "type": "text"
+                },
                 "imdb_meta": {
                     "type": "nested",
                     "properties": {

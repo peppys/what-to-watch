@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/PeppyS/what-to-watch"
   packages = ["proto"]
-  revision = "aa2fbb8d950602413a06538f7ac1215b657c468a"
+  revision = "e63ff43631dab15c296b2d26576a1add3c779225"
 
 [[projects]]
   name = "github.com/golang/protobuf"

@@ -18,6 +18,9 @@ type Movie struct {
 	Synopsis           string
 	SynopsisType       string
 	Runtime            string
+	Posters            struct {
+		Primary string
+	}
 }
 
 type Scraper struct {

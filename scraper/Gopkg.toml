@@ -33,6 +33,3 @@
   branch = "master"
   name = "github.com/gocolly/colly"
 
-[[constraint]]
-  branch = "master"
-  name = "github.com/xrash/smetrics"

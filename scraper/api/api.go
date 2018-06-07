@@ -33,6 +33,7 @@ type RottenTomatoesMeta struct {
 
 type Movie struct {
 	Title              string `json:"title"`
+	Image              string `json:"image"`
 	IMDBMeta           `json:"imdb_meta"`
 	RottenTomatoesMeta `json:"rotten_tomatoes_meta"`
 }
@@ -52,7 +53,7 @@ func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie 
 	movies := make(map[string]*Movie)
 	fmt.Println(i)
 	fmt.Println(r)
-	
+
 	// Add IMDB movies
 	for _, movie := range i {
 		imdbMeta := IMDBMeta{
@@ -64,6 +65,7 @@ func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie 
 		if m, set := movies[movie.Title]; !set {
 			movies[movie.Title] = &Movie{
 				movie.Title,
+				movie.Image,
 				imdbMeta,
 				RottenTomatoesMeta{},
 			}
@@ -71,6 +73,7 @@ func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie 
 			// Add IMDB meta to existing movie
 			movies[movie.Title] = &Movie{
 				m.Title,
+				m.Image,
 				imdbMeta,
 				m.RottenTomatoesMeta,
 			}
@@ -92,6 +95,7 @@ func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie 
 		if m, set := movies[movie.Title]; !set {
 			movies[movie.Title] = &Movie{
 				movie.Title,
+				movie.Posters.Primary,
 				IMDBMeta{},
 				rottenTomatoesMeta,
 			}
@@ -99,6 +103,7 @@ func (a *APIClient) Normalize(i []imdb.Movie, r []rottentomatoes.Movie) []Movie 
 			// Add RottenTomatoes meta to existing movie
 			movies[movie.Title] = &Movie{
 				m.Title,
+				m.Image,
 				m.IMDBMeta,
 				rottenTomatoesMeta,
 			}
