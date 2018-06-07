@@ -23,8 +23,9 @@ message MoviesList {
 
     message Movie {
         string title = 1;
-        IMDBMeta imdb_meta = 2;
-        RottenTomatoesMeta rotten_tomatoes_meta = 3;
+        string image = 2;
+        IMDBMeta imdb_meta = 3;
+        RottenTomatoesMeta rotten_tomatoes_meta = 4;
     }
 
     repeated Movie movies = 1;
