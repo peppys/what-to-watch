@@ -107,8 +107,29 @@ func (c *ElasticsearchClient) BulkIndexMovies(movies []*proto.MoviesList_Movie) 
 func (c *ElasticsearchClient) GetAllMovies() ([]*proto.MoviesList_Movie, error) {
 	query := "_search/?size=1000"
 
-	resp, err := c.httpClient.Get(
+	b := []byte(`
+		{
+			"sort": [{
+				"imdb_meta.score": {
+					"nested_path": "imdb_meta",
+					"order": "desc"
+				},
+				"rotten_tomatoes_meta.tomato_score": {
+					"nested_path": "rotten_tomatoes_meta",
+					"order": "desc"
+				},
+				"rotten_tomatoes_meta.popcorn_score": {
+					"nested_path": "rotten_tomatoes_meta",
+					"order": "desc"
+				}
+			}]
+		}
+	`)
+
+	resp, err := c.httpClient.Post(
 		fmt.Sprintf("http://%s/%s/%s", c.url, movieIndex, query),
+		"application/json",
+		bytes.NewBuffer(b),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("Failed sending request: %v", err)
