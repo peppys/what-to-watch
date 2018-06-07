@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MovieList from './Containers/MovieList'
 import logo from './Images/logo.svg';
+import material from './material'
 import './Style/App.css';
 
 class App extends Component {
@@ -17,4 +18,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default material(App)

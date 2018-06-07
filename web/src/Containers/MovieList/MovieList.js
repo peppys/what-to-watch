@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import MovieGrid from '../../Components/MovieGrid'
 
 export default class MovieList extends Component {
     componentWillMount() {
@@ -8,13 +10,24 @@ export default class MovieList extends Component {
     }
 
     render() {
-        const { loading } = this.props.movies
+        const { loading, movies } = this.props.movies
 
         return (
             <div>
                 {loading && "LOADING"}
-                {!loading && "Movie list"}
+                <MovieGrid movies={movies} />
             </div>
         )
+    }
+}
+
+MovieList.propTypes = {
+    movies: PropTypes.object
+}
+
+MovieList.defaultProps = {
+    movies: {
+        loading: false,
+        movies: []
     }
 }
